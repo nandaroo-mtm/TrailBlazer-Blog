@@ -1,0 +1,23 @@
+.row.mt-5
+    .col-4.mx-auto
+        .card 
+            .card-header 
+                h5 Login
+            .card-body
+                - flash.each do |name, msg|
+                    .text-danger.mb-2 #{msg}
+                = form_for @form, url: login_path, local: true do |f|
+                    .form-group.mb-2
+                        = f.label :email 
+                        = f.email_field :email, placeholder: 'Enter user name', class: 'form-control'
+                        - if @form.errors[:email].any?
+                            small.text-danger * #{@form.errors[:email][0]}
+
+                    .form-group.mb-2
+                        = f.label :password
+                        = f.password_field :password, placeholder: 'Enter password', class: 'form-control'
+                        - if @form.errors[:password].any?
+                            small.text-danger * #{@form.errors[:password][0]}
+
+                    .form-group
+                        = f.submit 'Save Post', class: 'btn btn-sm btn-primary'

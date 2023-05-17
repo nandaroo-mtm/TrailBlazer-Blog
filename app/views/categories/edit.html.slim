@@ -1,0 +1,15 @@
+.row.mt-5
+    .col-4.mx-auto
+        .card 
+            .card-header 
+                h5 
+                    = @title
+            .card-body
+                = form_with model: @model, url: category_path(@model.id), method: :patch do |f|
+                    .form-group.mb-2
+                        = f.label :name
+                        = f.text_field :name, placeholder: 'Enter category name', class: 'form-control'
+                        - if @form.errors[:name].any?
+                            small.text-danger * #{@form.errors[:name][0]}
+                    .form-group
+                        = f.submit 'Save', class: 'btn btn-sm btn-primary'

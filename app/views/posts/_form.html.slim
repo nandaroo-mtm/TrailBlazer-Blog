@@ -1,0 +1,34 @@
+= form_for form do |f|
+  = image_tag @form.image_url, class: "img_prev", style: "height: 100px;"
+  - if f.object.cached_image_data || form.image
+      = image_tag @form.image_url, class: "img_prev", style: "height: 100px;"
+  - else
+      = image_tag "default-image.jpg", class: "img_prev" , style: "height: 100px;"
+
+  .form-group.mb-2
+      = f.label :title
+      = f.text_field :title, placeholder: 'Enter post title', class: 'form-control'
+      - if @form.errors[:title].any?
+          small.text-danger * #{@form.errors[:title][0]}
+  
+  .form-group.mb-2
+      = f.label :content 
+      = f.text_area :content, placeholder: 'Enter post description', class: 'form-control'
+      - if @form.errors[:content].any?
+          small.text-danger * #{@form.errors[:content][0]}
+
+  .form-group.mb-2
+      = f.label :Category
+      = f.select :category_id, Category.all.collect {|c| [ c.name, c.id ] }, {include_blank: "Select a value"}, {class: "form-select"}
+      - if @form.errors[:category_id].any?
+          small.text-danger * #{@form.errors[:category_id][0]}
+
+  .form-group.mb-2
+      = f.label :image  
+      = f.hidden_field :image, value: @form.cached_image_data, id: nil
+      = f.file_field :image, class: 'form-control', id: "p_image"
+      - if @form.errors[:image].any?
+          small.text-danger * #{@form.errors[:image][0]}
+
+  .form-group
+      = f.submit 'Save Post', class: 'btn btn-sm btn-primary'

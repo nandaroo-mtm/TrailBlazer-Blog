@@ -1,0 +1,19 @@
+.container
+  .row.mt-5   
+    .card.p-3.mx-auto style="width: 700px"
+      .row 
+        .col-5
+          = image_tag @post.image_url, style: "width: 100%; display: inline-block" if @post.image
+        .col-7
+          .card-body 
+            h5 #{@post.title.capitalize()}
+            small 
+              |> created 
+              span.text-primary
+                = time_ago_in_words(@post.created_at) 
+              |< ago
+            p 
+              |> Category :
+              span.badge.bg-secondary #{@post.category.name}
+            p.py-3 #{@post.content}
+              

@@ -1,0 +1,39 @@
+.container 
+  .row.mt-3
+    .col-8.mx-auto
+      - flash.each do |name, msg|
+        .alert.alert-sm.alert-success role="alert" #{msg}
+  .row.mt-3
+    .col-8.mx-auto
+      = link_to "Create", new_post_path, method: :get, class: "btn btn-sm btn-primary"
+    .col-8.mx-auto
+      table.table.table-striped.table-hover
+        thead 
+          tr
+              th #
+              th Title
+              th Image
+              th style="width: 30%;"
+                | Content
+              th Category
+              th Actions 
+        tbody 
+          - @posts.each do |p|
+            tr
+              td #{p.id}
+              td #{p.title}
+              td 
+                = image_tag p.image_url , style: "width: 100px; display: inline-block" if p.image 
+                / = image_tag p.image.url, style: "width: 100px; display: inline-block" if p.image?
+              td style="width: 30%;"
+                | #{truncate(p.content, length: 50)}
+              td #{p.category.name}
+              td 
+                = link_to "Details", "/posts/#{p.id}", method: :get, class: "btn btn-sm btn-outline-secondary me-2 mb-sm-2"
+                = link_to "Edit", "/posts/#{p.id}/edit", method: :get, class: "btn btn-sm btn-outline-success me-2  mb-sm-2" 
+                = button_to "Delete", post_path(p), data: {confirm: "Are you sure?", turbo_confirm: "Are you sure?"}, method: :delete,
+                    class: "btn btn-sm btn-outline-danger"
+      = paginate @posts, theme: 'bootstrap-5'
+
+
+

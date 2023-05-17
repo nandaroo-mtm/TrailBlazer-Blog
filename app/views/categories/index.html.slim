@@ -1,0 +1,24 @@
+.container 
+  .row.mt-3
+    .col-8.mx-auto
+      - flash.each do |name, msg|
+        .alert.alert-sm.alert-success role="alert" #{msg}
+  .row.mt-3
+    .col-8.mx-auto
+      = link_to "Create", new_category_path, method: :get, class: "btn btn-sm btn-primary"
+    .col-8.mx-auto
+      table.table.table-striped.table-hover
+        thead 
+          tr
+              th #
+              th Name
+              th Actions 
+        tbody 
+          - @model.each do |c|
+            tr
+              td #{c.id}
+              td #{c.name}
+              td 
+                = link_to "Edit", "/categories/#{c.id}/edit", method: :get, class: "btn btn-sm btn-outline-success me-2  mb-sm-2" 
+                = button_to "Delete", category_path(c), data: {confirm: "Are you sure?", turbo_confirm: "Are you sure?"}, method: :delete,
+                    class: "btn btn-sm btn-outline-danger"

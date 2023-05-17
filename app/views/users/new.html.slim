@@ -1,0 +1,33 @@
+.row.mt-5
+    .col-4.mx-auto
+        .card 
+            .card-header 
+                h5 Sign Up
+            .card-body
+                = form_for @form, url: users_path, local: true do |f|
+                    .form-group.mb-2
+                        = f.label :name
+                        = f.text_field :name, placeholder: 'Enter user name', class: 'form-control'
+                        - if @form.errors[:name].any?
+                            small.text-danger * #{@form.errors[:name][0]}
+                    
+                    .form-group.mb-2
+                        = f.label :email 
+                        = f.email_field :email, placeholder: 'Enter post description', class: 'form-control'
+                        - if @form.errors[:email].any?
+                            small.text-danger * #{@form.errors[:email][0]}
+
+                    .form-group.mb-2
+                        = f.label :password
+                        = f.password_field :password, placeholder: 'Enter post description', class: 'form-control'
+                        - if @form.errors[:password].any?
+                            small.text-danger * #{@form.errors[:password][0]}
+
+                    .form-group.mb-2
+                        = f.label :password_confirmation 
+                        = f.password_field :password_confirmation, placeholder: 'Enter post description', class: 'form-control'
+                        - if @form.errors[:password_confirmation].any?
+                            small.text-danger * #{@form.errors[:password_confirmation][0]}
+
+                    .form-group
+                        = f.submit 'Save Post', class: 'btn btn-sm btn-primary'
