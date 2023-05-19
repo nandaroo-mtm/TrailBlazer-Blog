@@ -1,2 +1,33 @@
-h1 Users#edit
-p Find me in app/views/users/edit.html.slim
+.row.mt-5
+    .col-4.mx-auto
+        .card 
+            .card-header 
+                h5 Edit Profile
+            .card-body
+                = form_for @form, url: user_path, local: true do |f|
+                    .form-group.mb-2
+                        = f.label :name
+                        = f.text_field :name, placeholder: 'Enter user name', class: 'form-control'
+                        - if @form.errors[:name].any?
+                            small.text-danger * #{@form.errors[:name][0]}
+                    
+                    .form-group.mb-2
+                        = f.label :email 
+                        = f.email_field :email, placeholder: 'Enter post description', class: 'form-control'
+                        - if @form.errors[:email].any?
+                            small.text-danger * #{@form.errors[:email][0]}
+
+                    .form-group.mb-2
+                        = f.label :phone
+                        = f.number_field :phone, placeholder: 'Enter phone number', class: 'form-control'
+                        - if @form.errors[:phone].any?
+                            small.text-danger * #{@form.errors[:phone][0]}
+
+                    .form-group.mb-2
+                        = f.label :address
+                        = f.text_field :address, placeholder: 'Enter address', class: 'form-control'
+                        - if @form.errors[:address].any?
+                            small.text-danger * #{@form.errors[:address][0]}
+
+                    .form-group
+                        = f.submit 'Save', class: 'btn btn-sm btn-primary'

@@ -5,7 +5,15 @@
         .alert.alert-sm.alert-success role="alert" #{msg}
   .row.mt-3
     .col-8.mx-auto
-      = link_to "Create", new_category_path, method: :get, class: "btn btn-sm btn-primary"
+      .d-flex.justify-content-between.align-items-center
+        .test
+          = link_to "Create", new_category_path, method: :get, class: "btn btn-sm btn-primary me-2"
+          = link_to "Export", categories_export_path(format: "csv"), method: :get, class: "btn btn-sm btn-info me-2"
+          = link_to "Import", categories_import_path, method: :get, class: "btn btn-sm btn-secondary" 
+        = form_with url: categories_path, method: :get do |f|
+          .input-group
+            = f.text_field :search, placeholder: 'Enter category name', class: 'form-control form-control-sm'
+            = f.submit 'Search', class: 'btn btn-sm btn-primary'
     .col-8.mx-auto
       table.table.table-striped.table-hover
         thead 
@@ -22,3 +30,4 @@
                 = link_to "Edit", "/categories/#{c.id}/edit", method: :get, class: "btn btn-sm btn-outline-success me-2  mb-sm-2" 
                 = button_to "Delete", category_path(c), data: {confirm: "Are you sure?", turbo_confirm: "Are you sure?"}, method: :delete,
                     class: "btn btn-sm btn-outline-danger"
+      = paginate @model, theme: 'bootstrap-5'

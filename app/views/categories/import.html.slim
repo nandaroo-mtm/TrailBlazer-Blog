@@ -1,0 +1,12 @@
+.container 
+    .row.mt-5
+        .col-6.mx-auto
+            .card
+                .card-header
+                    h5.fw-bolder Category Import
+                .card-body
+                    - flash.each do |name, msg| 
+                        .text-danger.mb-3 #{msg}
+                    = form_tag categories_import_path, method: :post, multipart: true do
+                        = file_field_tag :file
+                        = submit_tag "⚙️ Import" 

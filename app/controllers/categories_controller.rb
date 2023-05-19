@@ -8,6 +8,10 @@ class CategoriesController < ApplicationController
     end
   end
 
+  def search
+    @model = Category.where("name LIKE ?", "%#{ctx[:params][:search]}%").reverse_order.page params[:page]
+  end
+
   def create
     run Category::Operation::Create do |ctx|
       flash[:notice] = "Post created!"
@@ -44,10 +48,34 @@ class CategoriesController < ApplicationController
     render :edit, status: :unprocessable_entity
   end
 
-  def show
-    run Category::Operation::Show do |ctx|
+  # def show
+  #   run Category::Operation::Show do |ctx|
+  #     @model = ctx[:model]
+  #     render
+  #   end
+  # end
+
+  def export
+    run Category::Operation::ListAll do |ctx|
       @model = ctx[:model]
-      render
+      respond_to do |format|
+        format.html
+        format.csv { send_data @model.to_csv, filename: "categories-#{Date.today}.csv" }
+      end
     end
+    # @categories = Category.all
+    # respond_to do |format|
+    #   format.html
+    #   format.csv { send_data @categories.to_csv, filename: "categories.csv" }
+    # end
+  end
+
+  def import_file 
+    _ctx = run Category::Operation::Import do |ctx|
+      return redirect_to categories_path
+    end
+
+    flash.now[:notice] = "Error occured!"
+    render :import
   end
 end

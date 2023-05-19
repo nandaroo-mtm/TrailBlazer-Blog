@@ -30,12 +30,21 @@
           <li class="nav-item">
             <%= link_to "Post", posts_path, method: :get, class: "nav-link" %>
           </li>
-          <li class="nav-item">
-            <%= link_to "Logout", logout_path, method: :delete, class: "nav-link" %>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="user-profile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <%= current_user.name %>
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="user-profile">
+              <li class="dropdown-item">
+                <%= link_to "Profile", "/users/#{current_user.id}", method: :get %>
+              </li>
+              <li class="dropdown-item">
+                <%= link_to "Logout", logout_path, method: :delete %>
+              </li>
+            </ul>
           </li>
         <% end %>
       </ul>
     </div>
-
   </div>
 </nav>

@@ -1,0 +1,22 @@
+.container
+  .row.mt-5   
+    .mx-auto style="width: 500px"
+      .card
+          .card-header 
+            h5 Profile Detail
+          .card-body
+              .row.mb-2
+                .col-5 User Name
+                .col-7 #{@model.name.upcase}
+              .row.mb-2
+                .col-5 Email
+                .col-7  #{@model.email}
+              .row.mb-2
+                .col-5 Phone No
+                .col-7  #{@model.phone}
+              .row.mb-2
+                .col-5 Address
+                .col-7  #{@model.address}
+
+              = link_to "Edit Profile", "/users/#{@model.id}/edit", method: :get, class: "btn btn-sm btn-outline-primary me-2  mb-sm-2" 
+              = link_to "Change Password", "/users/#{@model.id}/password", method: :get, class: "btn btn-sm btn-outline-secondary me-2  mb-sm-2" 

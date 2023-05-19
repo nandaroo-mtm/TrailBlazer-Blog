@@ -1,7 +1,5 @@
 class PostsController < ApplicationController
   def index
-    # @posts = Post.all.reverse_order.page params[:page]
-
     run Post::Operation::Index do |ctx|
       @posts = ctx[:model]
       @total = @model.count
@@ -45,5 +43,29 @@ class PostsController < ApplicationController
     run Post::Operation::Delete
     flash[:notice] = "Post deleted!"
     redirect_to posts_path
+  end
+
+  def export
+    run Post::Operation::ListAll do |ctx|
+      @posts = ctx[:model]
+      respond_to do |format|
+        format.html
+        format.csv { send_data @posts.to_csv, filename: "posts-#{Date.today}.csv" }
+      end
+    end
+    # @posts = Post.all
+    # respond_to do |format|
+    #   format.html
+    #   format.csv { send_data @posts.to_csv, filename: "posts-#{Date.today}.csv" }
+    # end
+  end
+
+  def import_file 
+    _ctx = run Post::Operation::Import do |ctx|
+      return redirect_to posts_path
+    end
+
+    flash.now[:notice] = "Error occured!"
+    render :import
   end
 end

@@ -3,7 +3,11 @@ module Category::Operation
       step :find_all
   
       def find_all(ctx, **)
-        ctx[:model] = ::Category.all.reverse_order
+        @categories= ::Category.all.reverse_order.page ctx[:params][:page]
+        if ctx[:params][:search] && ctx[:params][:search] != ""
+          @categories = @categories.where("name like ?", "%#{ctx[:params][:search]}%")
+        end
+        ctx[:model] = @categories;
       end
     end
 end

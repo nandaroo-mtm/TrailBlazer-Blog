@@ -12,8 +12,3 @@ module User::Operation
     end
 end
 
-# step :create
-
-# def create(ctx)
-#     ctx[:categories] = Category.all
-# end

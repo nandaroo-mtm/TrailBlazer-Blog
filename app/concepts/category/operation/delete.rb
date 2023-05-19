@@ -8,4 +8,4 @@ module Category::Operation
         model.destroy
       end
     end
-  end
+end

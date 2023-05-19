@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   skip_before_action :authorized, only: [:new, :create, :login, :action_login]
-  # before_action :authenticate, only: [:login]
+  # before_action :authenticate, only: [:login, :new]
 
   def index
   end
@@ -34,6 +34,35 @@ class UsersController < ApplicationController
   def logout
     session[:user_id] = nil
     redirect_to login_path
+  end
+
+  def edit
+    run User::Operation::Update::Present 
+  end
+
+  def update
+    run User::Operation::Update do |_|
+      return redirect_to user_path
+    end
+    render :edit, status: :unprocessable_entity
+  end
+
+  def show
+    run User::Operation::Show do |ctx|
+      @post = ctx[:model]
+      render
+    end
+  end
+
+  def edit_password
+    run User::Operation::UpdatePassword::Present 
+  end
+
+  def update_password
+    run User::Operation::UpdatePassword do 
+      return redirect_to user_path
+    end
+    render :edit_password
   end
 
   def destroy
