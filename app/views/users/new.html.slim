@@ -13,7 +13,7 @@
                     
                     .form-group.mb-2
                         = f.label :email 
-                        = f.email_field :email, placeholder: 'Enter post description', class: 'form-control'
+                        = f.email_field :email, placeholder: 'Enter email address', class: 'form-control'
                         - if @form.errors[:email].any?
                             small.text-danger * #{@form.errors[:email][0]}
 

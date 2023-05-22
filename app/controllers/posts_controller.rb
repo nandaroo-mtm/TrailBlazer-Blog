@@ -1,9 +1,23 @@
+# frozen_string_literal: true
+
 class PostsController < ApplicationController
   def index
+    if params[:type].present?
+      params[:user_id] = current_user.id
+      session['type'] = params[:type]
+    end
+
+    session['search'] = params[:search]
+    # if params[:search].present?
+    #   params[:user_id] = current_user.id
+    #   session['type'] = params[:type]
+    # end
+
     run Post::Operation::Index do |ctx|
       @posts = ctx[:model]
+      $test = ctx[:model]
       @total = @model.count
-  
+
       render
     end
   end
@@ -13,8 +27,8 @@ class PostsController < ApplicationController
   end
 
   def create
-    _ctx = run Post::Operation::Create do |ctx|
-      flash[:notice] = "Post created!"
+    run(Post::Operation::Create, current_user:) do |_ctx|
+      flash[:notice] = 'Post created!'
       return redirect_to posts_path
     end
     render :new, status: :unprocessable_entity
@@ -25,8 +39,8 @@ class PostsController < ApplicationController
   end
 
   def update
-    _ctx = run Post::Operation::Update do |_|
-      flash[:notice] = "Post updated!"
+    run Post::Operation::Update do |_|
+      flash[:notice] = 'Post updated!'
       return redirect_to posts_path
     end
     render :edit, status: :unprocessable_entity
@@ -41,31 +55,40 @@ class PostsController < ApplicationController
 
   def destroy
     run Post::Operation::Delete
-    flash[:notice] = "Post deleted!"
+    flash[:notice] = 'Post deleted!'
     redirect_to posts_path
   end
 
   def export
-    run Post::Operation::ListAll do |ctx|
-      @posts = ctx[:model]
+    if session[:type].present?
+      params[:user_id] = current_user.id
+      params[:type] = session[:type]
+    end
+
+    params[:search] = session[:search] if session[:search].present?
+
+    run Post::Operation::Export do |ctx|
+      model = ctx[:model]
       respond_to do |format|
         format.html
-        format.csv { send_data @posts.to_csv, filename: "posts-#{Date.today}.csv" }
+        format.csv { send_data model, filename: "posts-#{Date.today}.csv" }
       end
     end
-    # @posts = Post.all
-    # respond_to do |format|
-    #   format.html
-    #   format.csv { send_data @posts.to_csv, filename: "posts-#{Date.today}.csv" }
-    # end
   end
 
-  def import_file 
-    _ctx = run Post::Operation::Import do |ctx|
+  # def edit
+  #   run Post::Operation::Import::Present
+  # end
+
+  def import_file
+    # return redirect_to request.referer, notice: 'No file added' if params[:file].nil?
+    # return redirect_to request.referer, notice: 'Only CSV files allowed' unless params[:file].content_type == 'text/csv'
+
+    run Post::Operation::Import do |_ctx|
       return redirect_to posts_path
     end
-
-    flash.now[:notice] = "Error occured!"
+    # binding.pry
+    flash.now[:notice] = 'Error occured!'
     render :import
   end
 end

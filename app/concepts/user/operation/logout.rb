@@ -1,11 +1,10 @@
 module User::Operation
-    class Logout < Trailblazer::Operation
+  class Logout < Trailblazer::Operation
+    step :action!
 
-        step :action!
-
-        def action!(options, **)
-            session[:user_id] = nil
-            true
-        end
+    def action!(_options, **)
+      session[:user_id] = nil
+      true
     end
+  end
 end

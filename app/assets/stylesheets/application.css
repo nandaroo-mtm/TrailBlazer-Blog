@@ -1,0 +1,12 @@
+/* // font-family: 'Instrument Sans', sans-serif;
+// font-family: 'Karla', sans-serif;
+// font-family: 'Roboto Mono', monospace; */
+
+@font-face {
+    font-family: 'Name of Font';
+    src: url('/app/assets/fonts/RobotoMono-Regular.ttf')
+ }
+
+* {
+    font-family: 'Roboto Mono', monospace;  
+}

@@ -10,4 +10,5 @@ $(function () {
     };
     reader.readAsDataURL(image);
   });
+
 });

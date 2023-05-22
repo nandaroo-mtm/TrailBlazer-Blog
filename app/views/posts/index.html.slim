@@ -1,46 +1,60 @@
 .container 
-  .row.mt-3
-    .col-8.mx-auto
-      - flash.each do |name, msg|
-        .alert.alert-sm.alert-success role="alert" #{msg}
-  .row
-    .col-8.mx-auto.my-3
-      .d-flex.justify-content-between.align-items-center
-        .test
-          = link_to "Create", new_post_path, method: :get, class: "btn btn-sm btn-primary me-3"
-          = link_to "Export", posts_export_path(format: "csv"), method: :get, class: "btn btn-sm btn-info  me-2"
-          = link_to "Import", posts_import_path, method: :get, class: "btn btn-sm btn-secondary" 
-        = form_with url: posts_path, method: :get do |f|
-          .input-group
-            = f.text_field :search, placeholder: 'search', class: 'form-control form-control-sm'
-            = f.submit 'Search', class: 'btn btn-sm btn-primary'     
-    .col-8.mx-auto
-      table.table.table-striped.table-hover
-        thead 
-          tr
-              th #
-              th Title
-              th Image
-              th style="width: 30%;"
-                | Content
-              th Category
-              th Actions 
-        tbody 
-          - @posts.each do |p|
+  .row 
+    .col-2.mt-5
+      .card.mt-5
+        .card-header Filtered By
+        ul.list-group.list-group-flush#filter-list
+          li.list-group-item.text-warning
+            = link_to "All", '/posts?type=all', method: :get, class: 'text-decoration-none text-reset'
+          li.list-group-item 
+            = link_to "My Posts", '/posts?type=own', method: :get, class: 'text-decoration-none text-reset'
+          li.list-group-item 
+            = link_to "Other Posts", '/posts?type=other', method: :get, class: 'text-decoration-none text-reset'
+    .col-10
+      .row.mt-3.px-2
+        - flash.each do |name, msg|
+          .alert.alert-sm.alert-success role="alert" #{msg}
+      .row.my-3
+        / .col-12.mx-auto
+        .d-flex.justify-content-between.align-items-center
+          .test
+            = link_to "Create", new_post_path, method: :get, class: "btn btn-sm btn-primary me-3"
+            = link_to "Export", posts_export_path(format: "csv"), method: :get, class: "btn btn-sm btn-info  me-2"
+            = link_to "Import", posts_import_path, method: :get, class: "btn btn-sm btn-secondary" 
+          = form_with url: posts_path, method: :get do |f|
+            .input-group
+              = f.text_field :search, value: session['search'], placeholder: 'search', class: 'form-control form-control-sm'
+              = f.submit 'Search', class: 'btn btn-sm btn-primary' 
+      .row    
+        / .col-12.mx-auto
+        table.table.table-striped.table-hover
+          thead 
             tr
-              td #{p.id}
-              td #{p.title}
-              td 
-                = image_tag p.image_url , style: "width: 100px; display: inline-block" if p.image 
-              td style="width: 30%;"
-                | #{truncate(p.content, length: 50)}
-              td #{p.category.name}
-              td 
-                = link_to "Details", "/posts/#{p.id}", method: :get, class: "btn btn-sm btn-outline-secondary me-2 mb-sm-2"
-                = link_to "Edit", "/posts/#{p.id}/edit", method: :get, class: "btn btn-sm btn-outline-success me-2  mb-sm-2" 
-                = button_to "Delete", post_path(p), data: {confirm: "Are you sure?", turbo_confirm: "Are you sure?"}, method: :delete,
-                    class: "btn btn-sm btn-outline-danger"
-      = paginate @posts, theme: 'bootstrap-5'
+                th #
+                th Title
+                th Image
+                th style="width: 30%;"
+                  | Content
+                th Category
+                th User
+                th Actions 
+          tbody 
+            - @posts.each do |p|
+              tr
+                td #{p.id}
+                td #{p.title}
+                td 
+                  = image_tag p.image_url , style: "width: 100px; display: inline-block" if p.image 
+                td style="width: 30%;"
+                  | #{truncate(p.content, length: 50)}
+                td #{p.category.name}
+                td #{p.user.name}
+                td 
+                  = link_to "Details", "/posts/#{p.id}", method: :get, class: "btn btn-sm btn-outline-secondary me-2 mb-sm-2"
+                  = link_to "Edit", "/posts/#{p.id}/edit", method: :get, class: "btn btn-sm btn-outline-success me-2  mb-sm-2" 
+                  = button_to "Delete", post_path(p), data: {confirm: "Are you sure?", turbo_confirm: "Are you sure?"}, method: :delete,
+                      class: "btn btn-sm btn-outline-danger"
+        = paginate @posts, theme: 'bootstrap-5'
 
 
 

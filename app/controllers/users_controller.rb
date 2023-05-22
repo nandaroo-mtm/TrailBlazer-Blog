@@ -1,16 +1,17 @@
-class UsersController < ApplicationController
-  skip_before_action :authorized, only: [:new, :create, :login, :action_login]
-  # before_action :authenticate, only: [:login, :new]
+# frozen_string_literal: true
 
-  def index
-  end
+class UsersController < ApplicationController
+  skip_before_action :authorized, only: %i[new create login action_login]
+  # before_action :authenticate, only: %i[login new]
+
+  def index; end
 
   def new
     run User::Operation::Create::Present
   end
 
   def create
-    _ctx = run User::Operation::Create do |ctx|
+    run User::Operation::Create do |_ctx|
       return redirect_to posts_path
     end
 
@@ -18,11 +19,11 @@ class UsersController < ApplicationController
   end
 
   def login
-    run User::Operation::Login::Present 
+    run User::Operation::Login::Present
   end
 
   def action_login
-    _ctx = run User::Operation::Login do |ctx|
+    run User::Operation::Login do |ctx|
       session[:user_id] = ctx[:user][:id]
       return redirect_to posts_path
     end
@@ -37,7 +38,7 @@ class UsersController < ApplicationController
   end
 
   def edit
-    run User::Operation::Update::Present 
+    run User::Operation::Update::Present
   end
 
   def update
@@ -55,16 +56,15 @@ class UsersController < ApplicationController
   end
 
   def edit_password
-    run User::Operation::UpdatePassword::Present 
+    run User::Operation::UpdatePassword::Present
   end
 
   def update_password
-    run User::Operation::UpdatePassword do 
+    run User::Operation::UpdatePassword do
       return redirect_to user_path
     end
     render :edit_password
   end
 
-  def destroy
-  end
+  def destroy; end
 end
