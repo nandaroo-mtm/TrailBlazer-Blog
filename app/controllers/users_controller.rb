@@ -12,7 +12,13 @@ class UsersController < ApplicationController
 
   def create
     run User::Operation::Create do |_ctx|
-      return redirect_to posts_path
+      @user = _ctx[:model] 
+      picture_hash={}
+      picture_hash[:image] = _ctx['params']['user']['pictures_attributes']['image']
+      picture_hash[:imageable] = @user
+      @picture = Picture.new(picture_hash)
+      @picture.save
+      return redirect_to login_path
     end
 
     render :new, status: :unprocessable_entity
@@ -42,7 +48,13 @@ class UsersController < ApplicationController
   end
 
   def update
-    run User::Operation::Update do |_|
+    run User::Operation::Update do |ctx|
+      if ctx['params']['user']['pictures_attributes'].present?
+        picture = ctx[:model].pictures[0]
+        picture_hash={}
+        picture_hash[:image] = ctx['params']['user']['pictures_attributes']['image']
+        picture.update(picture_hash)
+      end
       return redirect_to user_path
     end
     render :edit, status: :unprocessable_entity

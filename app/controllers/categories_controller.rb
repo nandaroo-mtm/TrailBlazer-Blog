@@ -12,7 +12,7 @@ class CategoriesController < ApplicationController
 
   def create
     run Category::Operation::Create do |_ctx|
-      flash[:notice] = 'Post created!'
+      flash[:notice] = 'Category created!'
       return redirect_to categories_path
     end
 

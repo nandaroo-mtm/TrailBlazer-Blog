@@ -3,7 +3,7 @@
     .card.p-3.mx-auto style="width: 700px"
       .row 
         .col-5
-          = image_tag @post.image_url, style: "width: 100%; display: inline-block" if @post.image
+          = image_tag @post.pictures[0].image_url, style: "width: 100%; display: inline-block" if @post.pictures
         .col-7
           .card-body 
             h5 #{@post.title.capitalize()}

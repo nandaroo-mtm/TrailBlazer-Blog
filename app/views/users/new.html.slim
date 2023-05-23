@@ -6,6 +6,13 @@
             .card-body
                 = form_for @form, url: users_path, local: true do |f|
                     .form-group.mb-2
+                        = f.label :image  
+                        = f.fields_for :pictures_attributes do |image_form| 
+                            = image_form.file_field :image, class: 'form-control', id: "p_image"
+                            - if @form.errors[:pictures_attributes].any?
+                                small.text-danger * #{@form.errors[:pictures_attributes][0]}
+                                
+                    .form-group.mb-2
                         = f.label :name
                         = f.text_field :name, placeholder: 'Enter user name', class: 'form-control'
                         - if @form.errors[:name].any?

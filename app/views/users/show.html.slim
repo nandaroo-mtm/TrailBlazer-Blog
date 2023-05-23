@@ -6,6 +6,8 @@
             h5 Profile Detail
           .card-body
               .row.mb-2
+                = image_tag @model.pictures[0].image_url, style: "width: 200px; display: inline-block", class: "mx-auto" if @model.pictures
+              .row.mb-2
                 .col-5 User Name
                 .col-7 #{@model.name.upcase}
               .row.mb-2

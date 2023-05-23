@@ -14,7 +14,8 @@ class PostsController < ApplicationController
     # end
 
     run Post::Operation::Index do |ctx|
-      @posts = ctx[:model]
+      @posts = ctx[:model] 
+      # binding.pry
       $test = ctx[:model]
       @total = @model.count
 
@@ -27,10 +28,12 @@ class PostsController < ApplicationController
   end
 
   def create
-    run(Post::Operation::Create, current_user:) do |_ctx|
+    run Post::Operation::Create, current_user: current_user do |_ctx|
       flash[:notice] = 'Post created!'
+      # binding.pry
       return redirect_to posts_path
     end
+    binding.pry
     render :new, status: :unprocessable_entity
   end
 
@@ -39,8 +42,16 @@ class PostsController < ApplicationController
   end
 
   def update
-    run Post::Operation::Update do |_|
+    run Post::Operation::Update do |ctx|
       flash[:notice] = 'Post updated!'
+
+      if ctx['params']['post']['pictures_attributes'].present?
+        picture = ctx[:model].pictures[0]
+        picture_hash={}
+        picture_hash[:image] = ctx['params']['post']['pictures_attributes']['image']
+        picture.update(picture_hash)
+      end
+      
       return redirect_to posts_path
     end
     render :edit, status: :unprocessable_entity

@@ -43,8 +43,8 @@
               tr
                 td #{p.id}
                 td #{p.title}
-                td 
-                  = image_tag p.image_url , style: "width: 100px; display: inline-block" if p.image 
+                td
+                  = image_tag p.pictures[0].image_url , style: "width: 100px; display: inline-block" if p.pictures 
                 td style="width: 30%;"
                   | #{truncate(p.content, length: 50)}
                 td #{p.category.name}
