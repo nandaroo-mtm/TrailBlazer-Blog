@@ -97,13 +97,11 @@ gem 'bootstrap_form'
 gem 'bootstrap-sass'
 gem 'jquery-rails'
 
-gem 'image_processing'
-gem 'shrine'
-gem 'shrine-reform'
-
 # for pagination
 gem 'bootstrap5-kaminari-views'
 gem 'kaminari'
 
 # for formatting
 gem 'rubocop', require: false
+
+gem 'carrierwave'

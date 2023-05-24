@@ -1,5 +1,5 @@
 $(function () {
-  $("#p_image").on("change", function (event) {
+  $("#post_image").on("change", function (event) {
     console.log('post_image')
     var files = event.target.files;
     var image = files[0];

@@ -27,10 +27,12 @@ class PostsController < ApplicationController
   end
 
   def create
-    run(Post::Operation::Create, current_user:) do |_ctx|
+    ctx = run(Post::Operation::Create, current_user:) do |_ctx|
       flash[:notice] = 'Post created!'
       return redirect_to posts_path
     end
+    @post = ctx[:model]
+    binding.pry
     render :new, status: :unprocessable_entity
   end
 

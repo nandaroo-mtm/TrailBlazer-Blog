@@ -3,13 +3,12 @@ require 'reform/form/active_model/validations'
 module Post::Contract
   class Update < Reform::Form
     include ActiveModel::Validations
-    include ImageUploader::Attachment(:image)
 
     property :title
     property :content
     property :category_id
     property :image
-    property :image_data
+    property :image_cache
 
     validates :title, presence: { message: "Title can't be blank!" }
     validates :content, presence: { message: "Content can't be blank!" },

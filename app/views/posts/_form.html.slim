@@ -1,11 +1,17 @@
 
-= form_with(model: @form) do |f|
-    - if @model.image_url && f.object.cached_image_data.nil?
-        = image_tag @model.image_url, class: "img_prev", style: "height: 100px;"
-    - elsif f.object.cached_image_data
-        = image_tag @form.image_url, class: "img_prev", style: "height: 100px;"
-    - else
-        = image_tag "default-image.jpg", class: "img_prev" , style: "height: 100px;"
+= form_for @form, html: { multipart: true } do |f|
+    = @form.image_cache
+    / - if @form.image?
+    = image_tag @model.image_url, alt: 'Image', class: "img_prev" , style: "height: 100px;" if @model.image?
+    / - else 
+    = image_tag "default-image.jpg", class: "img_prev", style: "height: 100px;"
+
+    / - if @model.image_url && f.object.cached_image_data.nil?
+    /     = image_tag @model.image_url, class: "img_prev", style: "height: 100px;"
+    / - elsif f.object.cached_image_data
+    /     = image_tag @form.image_url, class: "img_prev", style: "height: 100px;"
+    / - else
+    /     = image_tag "default-image.jpg", class: "img_prev" , style: "height: 100px;"
 
     .form-group.mb-2
         = f.label :title
@@ -27,8 +33,8 @@
 
     .form-group.mb-2
         = f.label :image  
-        = f.hidden_field :image, value: @form.cached_image_data, id: nil
-        = f.file_field :image, class: 'form-control', id: "p_image"
+        = f.file_field :image, class: 'form-control'
+        = f.hidden_field :image_cache
         - if @form.errors[:image].any?
             small.text-danger * #{@form.errors[:image][0]}
 
