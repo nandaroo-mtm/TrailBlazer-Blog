@@ -8,10 +8,7 @@ class PostsController < ApplicationController
     end
 
     session['search'] = params[:search]
-    # if params[:search].present?
-    #   params[:user_id] = current_user.id
-    #   session['type'] = params[:type]
-    # end
+    
 
     run Post::Operation::Index do |ctx|
       @posts = ctx[:model]
@@ -76,18 +73,12 @@ class PostsController < ApplicationController
     end
   end
 
-  # def edit
-  #   run Post::Operation::Import::Present
-  # end
 
   def import_file
-    # return redirect_to request.referer, notice: 'No file added' if params[:file].nil?
-    # return redirect_to request.referer, notice: 'Only CSV files allowed' unless params[:file].content_type == 'text/csv'
 
     run Post::Operation::Import do |_ctx|
       return redirect_to posts_path
     end
-    # binding.pry
     flash.now[:notice] = 'Error occured!'
     render :import
   end

@@ -21,3 +21,5 @@
 
                     .form-group
                         = f.submit 'Login', class: 'btn btn-sm btn-primary'
+                        = link_to "Forgot password?", password_reset_url_path, method: :get, class: "ms-3"
+                        

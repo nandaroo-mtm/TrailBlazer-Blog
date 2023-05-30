@@ -1,17 +1,5 @@
 Rails.application.routes.draw do
-  # get 'users/index'
-  # get 'users/new'
-  # get 'users/create'
-  # get 'users/edit'
-  # get 'users/destroy'
 
-  # get 'categories/index'
-  # post 'categories/create'
-  # get 'categories/new'
-  # get 'categories/delete'
-  # get 'categories/update'
-  # get 'categories/show'
-  # get 'categories/new'
 
   get 'categories/export', to: 'categories#export', defaults: { format: :csv }
   get 'categories/import', to: 'categories#import'
@@ -22,17 +10,23 @@ Rails.application.routes.draw do
 
   get 'login', to: 'users#login'
   post 'login', to: 'users#action_login'
-  get 'users/:id/password', to: 'users#edit_password'
+  get 'users/:id/password', to: 'users#edit_password', as: 'change_password_form'
   patch 'users/:id/password', to: 'users#update_password', as: 'change_password'
   delete 'logout', to: 'users#logout'
+
+  get 'password_reset_url', to: 'users#password_reset_url'
+  post 'password_reset_url', to: 'users#password_reset_url_action'
+
+  get 'users/password/:id/:token', to: 'users#password_reset', as: 'reset_password'
+  patch 'users/password/:id', to: 'users#password_reset_action', as: 'reset_password_action'
+
+
   resources :users
   resources :categories
   resources :posts
 
   get 'categories/search', to: 'categories#search', as: 'categories_search'
-  # post 'posts/:id', to: "posts#update"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  
 
-  # Defines the root path route ("/")
   root 'posts#index'
 end

@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  skip_before_action :authorized, only: %i[new create login action_login]
-  # before_action :authenticate, only: %i[login new]
+  before_action :authorized, only: %i[logout edit show edit_password update_password] 
 
   def index; end
 
@@ -23,7 +22,7 @@ class UsersController < ApplicationController
   end
 
   def action_login
-    run User::Operation::Login do |ctx|
+    _ctx = run User::Operation::Login do |ctx|
       session[:user_id] = ctx[:user][:id]
       return redirect_to posts_path
     end
@@ -40,7 +39,7 @@ class UsersController < ApplicationController
   def edit
     run User::Operation::Update::Present
   end
-
+  
   def update
     run User::Operation::Update do |_|
       return redirect_to user_path
@@ -67,4 +66,37 @@ class UsersController < ApplicationController
   end
 
   def destroy; end
+
+  def password_reset_url
+    run User::Operation::PasswordResetUrl::Present
+  end
+
+  def password_reset_url_action
+    run User::Operation::PasswordResetUrl do |_|
+      flash[:notice] = "Email sent!"
+      return redirect_to password_reset_url_path
+    end
+    render :password_reset, status: :unprocessable_entity
+  end
+
+  def password_reset
+    @user = User.find_by_id(params[:id])
+    token = params[:token]
+    if token != @user.reset_password_token
+      flash[:notice] = "Invalid token to reset password!"
+      return redirect_to login_path 
+    end
+    # run User::Operation::PasswordReset::Present 
+    run User::Operation::UpdatePassword::Present
+  end
+
+  def password_reset_action
+    run User::Operation::UpdatePassword do |_|
+      return redirect_to login_path
+    end
+    render :password_reset, status: :unprocessable_entity
+  end
+  
+  
+
 end
