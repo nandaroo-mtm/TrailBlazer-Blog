@@ -24,8 +24,14 @@ class PostsController < ApplicationController
   end
 
   def create
+    @pictures = params[:post][:pictures_attributes][:image] if params[:post][:pictures_attributes].present?
     run(Post::Operation::Create, current_user:) do |_ctx|
       flash[:notice] = 'Post created!'
+      @post = _ctx[:model]
+      @pictures.each do |p|
+        Picture.create(image: p, post_id: @post.id)
+      end
+      # @post.pictures.create(image: @pictures)
       return redirect_to posts_path
     end
     render :new, status: :unprocessable_entity
@@ -36,8 +42,16 @@ class PostsController < ApplicationController
   end
 
   def update
-    run Post::Operation::Update do |_|
+    @pictures = params[:post][:pictures_attributes][:image] if params[:post][:pictures_attributes].present?
+    run Post::Operation::Update do |_ctx|
       flash[:notice] = 'Post updated!'
+      if @pictures.present?
+        @post = _ctx[:model]
+        @post.pictures.clear
+        @pictures.each do |p|
+          Picture.create(image: p, post_id: @post.id)
+        end
+      end
       return redirect_to posts_path
     end
     render :edit, status: :unprocessable_entity

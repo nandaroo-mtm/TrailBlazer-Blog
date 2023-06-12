@@ -69,6 +69,15 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'webdrivers'
+
+  gem 'faker'
+  gem 'factory_bot_rails'
+  gem 'rails-controller-testing'
+  gem 'rspec-rails'
+  gem 'shoulda'
+  gem 'shoulda-callback-matchers'
+  gem 'simplecov'
+  gem 'shoulda-matchers'
 end
 
 # gem "simple_form"

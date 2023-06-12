@@ -2,9 +2,7 @@
   .row.mt-5   
     .card.p-3.mx-auto style="width: 700px"
       .row 
-        .col-5
-          = image_tag @post.image_url, style: "width: 100%; display: inline-block" if @post.image
-        .col-7
+        .col-6
           .card-body 
             h5 #{@post.title.capitalize()}
             small 
@@ -16,4 +14,8 @@
               |> Category :
               span.badge.bg-secondary #{@post.category.name}
             p.py-3 #{@post.content}
+        .col-6.d-flex.flex-wrap
+          - @post.pictures.each do |p|
+            = image_tag p.image_url, style: "width: 50%; height: 150px; display: inline-block"
+        
               

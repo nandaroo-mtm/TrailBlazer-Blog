@@ -1,11 +1,5 @@
 
 = form_with(model: @form) do |f|
-    - if @model.image_url && f.object.cached_image_data.nil?
-        = image_tag @model.image_url, class: "img_prev", style: "height: 100px;"
-    - elsif f.object.cached_image_data
-        = image_tag @form.image_url, class: "img_prev", style: "height: 100px;"
-    - else
-        = image_tag "default-image.jpg", class: "img_prev" , style: "height: 100px;"
 
     .form-group.mb-2
         = f.label :title
@@ -26,11 +20,13 @@
             small.text-danger * #{@form.errors[:category_id][0]}
 
     .form-group.mb-2
-        = f.label :image  
-        = f.hidden_field :image, value: @form.cached_image_data, id: nil
-        = f.file_field :image, class: 'form-control', id: "p_image"
-        - if @form.errors[:image].any?
-            small.text-danger * #{@form.errors[:image][0]}
+        =f.fields_for :pictures_attributes do |p| 
+            =p.label :image
+            / =p.hidden_field :image, value: p.object.cached_image_data
+            =p.file_field   :image, include_hidden: false, multiple: true, class: 'form-control', accept: ".jpg, .jpeg, .png"
+            / =p.check_box    :_destroy unless p.object.new_record?
+        - if @form.errors[:pictures_attributes].any?
+            small.text-danger * #{@form.errors[:pictures_attributes][0]}
 
     .form-group
         = f.submit 'Save Post', class: 'btn btn-sm btn-primary'
